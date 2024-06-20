@@ -3,7 +3,10 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-
+import expressLayouts from 'express-ejs-layouts';
+import compression from 'compression';
+import helmet from 'helmet';
+import RateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
@@ -12,22 +15,37 @@ const __dirname = import.meta.dirname;
 
 const app = express();
 mongoose.set('strictQuery', false);
-const mongoDB =
-  'mongodb+srv://Ben_Long:7skFOfMMxEQz6mwz@cluster0.xp4dg26.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0';
+
+const mongoDB = process.env.DATABASE_URL;
 
 main().catch((err) => console.log(err));
+
 async function main() {
   await mongoose.connect(mongoDB);
 }
 
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      'script-src': ["'self'", 'code.jquery.com', 'cdn.jsdelivr.net'],
+    },
+  }),
+);
+app.use(expressLayouts);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
+app.use(limiter);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
