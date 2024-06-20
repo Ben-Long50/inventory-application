@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <title></title>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="col-sm-2">
+        <ul class="sidebar-nav">
+          <li><a href="/catalog">Home</a></li>
+          <li>
+            <hr />
+          </li>
+          <li><a href="/catalog/potions">All Potions</a></li>
+          <li>
+            <hr />
+          </li>
+          <li><a href="/catalog/classifications">Potions by Classification</a></li>
+          <li>
+            <hr />
+          </li>
+          <li><a href="/catalog/potion/create">Add a New Potion</a></li>
+          <li>
+            <hr />
+          </li>
+          <li><a href="/catalog/classification/create">Add a New Classification</a></li>
+        </ul>
+      </nav>
+      <div class="col-sm-10"><%- body %></div>
+    </div>
+  </div>
+</body>
+
+</html>

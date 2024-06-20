@@ -29,13 +29,7 @@ const limiter = RateLimit({
   max: 20,
 });
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      'script-src': ["'self'", 'code.jquery.com', 'cdn.jsdelivr.net'],
-    },
-  }),
-);
+app.use(helmet());
 app.use(expressLayouts);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,7 +41,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
