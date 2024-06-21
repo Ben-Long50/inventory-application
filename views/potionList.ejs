@@ -1,0 +1,16 @@
+<h1 class="content-title"><%= title %></h1>
+<% if(potionList.length > 0) { %>
+<ul class="flex-column-list">
+  <% potionList.forEach(potion => { %>
+  <li class="potion-list-item bg-lvl-2">
+    <img class="list-image" src="<%= potion.image %>" alt="Potion">
+    <a href="<%= potion.url %>">
+      <h3 class="list-title"><%= potion.name %></h3>
+    </a>
+    <p class="list-desc"><%= potion.description %></p>
+    <p class="list-price">Price: <%= potion.price %></p>
+    <p class="list-qty">In Stock: <%= potion.quantityInStock %></p>
+  </li>
+  <% }) %>
+</ul>
+<% } %>

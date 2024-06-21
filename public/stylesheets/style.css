@@ -1,12 +1,132 @@
-body {
-  padding: 50px;
-  font:
-    14px 'Lucida Grande',
-    Helvetica,
-    Arial,
-    sans-serif;
+html,
+body,
+.layout-container {
+  color: white;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 a {
-  color: #00b7ff;
+  color: white;
+  text-decoration: none;
+}
+
+hr {
+  background-color: blue;
+}
+
+.bg-lvl-1 {
+  background-color: #121212;
+}
+
+.bg-lvl-2 {
+  background-color: rgb(255, 255, 255, 0.05);
+}
+
+.bg-lvl-3 {
+  background-color: rgb(255, 255, 255, 0.08);
+}
+
+.layout-container {
+  display: grid;
+  grid-template-columns: clamp(300px, 20vw, 500px) 1fr;
+  grid-template-rows: 5vh 1fr 5vh;
+  grid-template-areas:
+    'header header'
+    'navbar content'
+    'footer footer';
+}
+
+.header {
+  grid-area: header;
+}
+
+.footer {
+  grid-area: footer;
+}
+
+.navbar {
+  font-size: 1.5rem;
+  padding: 2rem;
+  grid-area: navbar;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  align-items: center;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1500px;
+}
+
+.content-title {
+  font-size: 3.5rem;
+}
+
+.flex-column-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.potion-list-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    'image title price'
+    'image desc qty';
+  column-gap: 2rem;
+  align-items: center;
+  min-height: 200px;
+  border-radius: 0.5rem;
+  padding-right: 2rem;
+}
+
+.list-image {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  grid-area: image;
+  border: solid white 1px;
+}
+
+.list-title {
+  font-size: 2rem;
+  grid-area: title;
+}
+
+.list-desc,
+.list-price,
+.list-qty {
+  font-size: 1.25rem;
+}
+
+.list-desc {
+  grid-area: desc;
+}
+
+.list-price {
+  grid-area: price;
+  justify-self: end;
+}
+
+.list-qty {
+  grid-area: qty;
+  justify-self: end;
 }

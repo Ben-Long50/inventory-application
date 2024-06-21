@@ -1,0 +1,53 @@
+<h1 class="content-title"><%= title %></h1>
+<form method="POST">
+  <div class="form-group">
+    <label for="title">Potion Name:</label>
+    <input type="text" id="title" class="form-control" name="title" placeholder="Name of potion" required>
+  </div>
+
+  <div class="form-group">
+    <label for="classification">Classification:</label>
+    <select id="classification" class="form-control" name="classification" required>
+      <option value="">--Please select a classification--</option>
+      <% classifications.forEach(function(classification) { %>
+      <option value="<%= classification._id %>"><%= classification.title %></option>
+      <% }); %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="classification">Primary Effect:</label>
+    <select id="classification" class="form-control" name="classification" required>
+      <option value="">--Please select an effect--</option>
+      <% effects.forEach(function(effect) { %>
+      <option value="<%= effect._id %>"><%= effect.title %></option>
+      <% }); %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Secondary Effects:</label>
+    <div>
+      <% effects.forEach(function(effect) { %>
+      <div style="display: inline; padding-right:10px;">
+        <% if (effect.checked) { %>
+        <input type="checkbox" class="checkbox-input" name="effect" id="<%= effect._id %>" value="<%= effect._id %>" checked>
+        <% } else { %>
+        <input type="checkbox" class="checkbox-input" name="effect" id="<%= effect._id %>" value="<%= effect._id %>">
+        <% } %>
+        <label for="<%= effect._id %>">&nbsp;<%= effect.title %></label>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<% if (errors) { %>
+<ul>
+  <% errors.forEach(function(error) { %>
+  <li><%= error.msg %></li>
+  <% }); %>
+</ul>
+<% } %>

@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const ClassificationSchema = new Schema({
-  classification: { type: String, required: true },
+  title: { type: String, required: true },
+  multiplier: { type: Number, required: true },
+  subMultiplier: { type: Number, required: true },
 });
 
 // Virtual for classification's URL

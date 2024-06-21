@@ -9,10 +9,37 @@ const PotionSchema = new Schema({
     ref: 'Classification',
     required: true,
   },
-  subClassifications: [{ type: Schema.Types.ObjectId, ref: 'Classification' }],
-  description: { type: String, required: true },
+  description: { type: String },
+  effect: { type: Schema.Types.ObjectId, ref: 'Effect', required: true },
+  subEffects: [{ type: Schema.Types.ObjectId, ref: 'Effect' }],
   price: { type: Number, required: true },
-  quantitiyInStock: { type: Number, required: true },
+  quantityInStock: { type: Number, required: true },
+  lore: { type: String },
+  image: { type: Buffer },
+});
+
+PotionSchema.pre('save', async function (next) {
+  // await this.populate('classification').exec();
+  // await this.populate('effect').exec();
+  // await this.populate('subEffects').exec();
+
+  const { title, multiplier, subMultiplier } = this.classification;
+  const { statBonus, title: effectTitle, duration } = this.effect;
+  let subEffectString = '';
+
+  this.subEffects.forEach((subEffect) => {
+    subEffectString += `, ${subMultiplier * subEffect.statBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`;
+  });
+
+  if (this.subEffects.length > 0) {
+    this.description = `Grants the consumer ${multiplier * statBonus} ${effectTitle} for ${multiplier * duration} seconds${subEffectString}`;
+  } else {
+    this.description = `Grants the consumer ${multiplier * statBonus} ${effectTitle} for ${multiplier * duration} seconds`;
+  }
+
+  this.name = `${title} Potion of ${effectTitle}`;
+
+  next();
 });
 
 // Virtual for potion's URL
