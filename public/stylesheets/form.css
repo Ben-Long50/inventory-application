@@ -1,0 +1,30 @@
+.form {
+  font-size: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  align-items: flex-start;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.check-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.button {
+  font-size: 1.25rem;
+}
+
+input,
+select,
+textarea {
+  font-size: 1.25rem;
+}

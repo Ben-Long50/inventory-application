@@ -1,0 +1,10 @@
+<h1 class="content-title"><%= title %></h1>
+<% if(deleted === false) { %>
+<p>Are you sure you want to delete the <%= classification.title %> classification?</p>
+<form method="POST">
+  <button class="button" type="submit">Delete</button>
+</form>
+<% } else { %>
+<p>You have successfully deleted the <%= classification.name %> classification</p>
+<a href="/catalog/classifications"><button class="button">Return to Catalog</button></a>
+<% } %>

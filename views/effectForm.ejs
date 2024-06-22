@@ -1,0 +1,40 @@
+<h1 class="content-title"><%= title %></h1>
+
+<form class="form bg-lvl-2" method="POST">
+  <div class="form-group">
+    <label for="title">Title:</label>
+    <% if(effect) { %>
+    <input id="title" name="title" value="<%= effect.title %>"></input>
+    <% } else { %>
+    <input id="title" name="title" value="" placeholder="--Please Input a Effect Title--"></input>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="statBonus">Base Stat Bonus:</label>
+    <% if(effect) { %>
+    <input type="number" id="statBonus" name="statBonus" value="<%= effect.statBonus %>"></input>
+    <% } else { %>
+    <input type="number" id="statBonus" name="statBonus" value="" placeholder="--Please Input a Effect Base Stat Bonus--"></input>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="duration">Base Duration:</label>
+    <% if(effect) { %>
+    <input type="number" id="duration" name="duration" value="<%= effect.duration %>"></input>
+    <% } else { %>
+    <input type="number" id="duration" name="duration" value="" placeholder="--Please Input a Effect Base Duration--"></input>
+    <% } %>
+  </div>
+
+  <button class="button" type="submit">Submit</button>
+</form>
+
+<% if (errors) { %>
+<ul>
+  <% errors.forEach(function(error) { %>
+  <li><%= error.msg %></li>
+  <% }); %>
+</ul>
+<% } %>

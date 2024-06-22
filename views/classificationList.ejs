@@ -1,0 +1,35 @@
+<h1 class="content-title"><%= title %></h1>
+<% if(classificationList.length > 0) { %>
+<ul class="flex-column-list">
+  <% classificationList.forEach(classification => { %>
+  <li class="classification-list-item bg-lvl-2">
+    <div class="title-container">
+      <h3 class="list-title"><%= classification.title %></h3>
+      <div class="button-container">
+        <a href="classification/<%= classification._id %>/update">
+          <button class="button">Edit</button>
+        </a>
+        <a href="classification/<%= classification._id %>/delete">
+          <button class="button">Delete</button>
+        </a>
+      </div>
+
+    </div>
+    <p class="list-desc">Primary Multiplier: <%= classification.multiplier %></p>
+    <p class="list-price">Secondary Multiplier: <%= classification.subMultiplier %></p>
+    <% potionList.forEach(potion => { %>
+    <% if(potion.classification.title === classification.title) { %>
+    <div class="potion-list-item bg-lvl-2">
+      <img class="list-image" src="<%= potion.image %>" alt="Potion">
+      <a href="<%= potion.url %>">
+        <h3 class="list-title"><%= potion.name %></h3>
+      </a>
+      <p class="list-desc"><%= potion.description %></p>
+      <p class="list-price">Price: <%= potion.price %></p>
+      <p class="list-qty">In Stock: <%= potion.quantityInStock %></p>
+    </div>
+    <% }}) %>
+  </li>
+  <% }) %>
+</ul>
+<% } %>

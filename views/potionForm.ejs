@@ -1,14 +1,14 @@
 <h1 class="content-title"><%= title %></h1>
-<form method="POST">
-  <div class="form-group">
-    <label for="title">Potion Name:</label>
-    <input type="text" id="title" class="form-control" name="title" placeholder="Name of potion" required>
-  </div>
 
+<form class="form bg-lvl-2" method="POST">
   <div class="form-group">
     <label for="classification">Classification:</label>
     <select id="classification" class="form-control" name="classification" required>
+      <% if(potion) { %>
+      <option value="<%= potion.classification._id %>"><%= potion.classification.title %></option>
+      <% } else { %>
       <option value="">--Please select a classification--</option>
+      <% } %>
       <% classifications.forEach(function(classification) { %>
       <option value="<%= classification._id %>"><%= classification.title %></option>
       <% }); %>
@@ -16,9 +16,13 @@
   </div>
 
   <div class="form-group">
-    <label for="classification">Primary Effect:</label>
-    <select id="classification" class="form-control" name="classification" required>
+    <label for="effect">Primary Effect:</label>
+    <select id="effect" class="form-control" name="effect" required>
+      <% if(potion) { %>
+      <option value="<%= potion.effect._id %>"><%= potion.effect.title %></option>
+      <% } else { %>
       <option value="">--Please select an effect--</option>
+      <% } %>
       <% effects.forEach(function(effect) { %>
       <option value="<%= effect._id %>"><%= effect.title %></option>
       <% }); %>
@@ -27,21 +31,47 @@
 
   <div class="form-group">
     <label>Secondary Effects:</label>
-    <div>
+    <ul class="check-list">
       <% effects.forEach(function(effect) { %>
-      <div style="display: inline; padding-right:10px;">
-        <% if (effect.checked) { %>
-        <input type="checkbox" class="checkbox-input" name="effect" id="<%= effect._id %>" value="<%= effect._id %>" checked>
+      <li>
+        <% if (subEffectTitles.includes(effect.title)) { %>
+        <input type="checkbox" class="checkbox-input" name="subEffect" id="<%= effect._id %>" value="<%= effect._id %>" checked>
         <% } else { %>
-        <input type="checkbox" class="checkbox-input" name="effect" id="<%= effect._id %>" value="<%= effect._id %>">
+        <input type="checkbox" class="checkbox-input" name="subEffect" id="<%= effect._id %>" value="<%= effect._id %>">
         <% } %>
         <label for="<%= effect._id %>">&nbsp;<%= effect.title %></label>
-      </div>
+      </li>
       <% }); %>
-    </div>
+    </ul>
   </div>
 
-  <button class="btn btn-primary" type="submit">Submit</button>
+  <div class="form-group">
+    <label for="price">Price:</label>
+    <% if(potion) { %>
+    <input type="number" id="price" name="price" value="<%= potion.price %>">
+    <% } else { %>
+    <input type="number" id="price" name="price">
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="quantityInStock">In Stock:</label>
+    <% if(potion) { %>
+    <input type="number" id="quantityInStock" name="quantityInStock" value="<%= potion.quantityInStock %>">
+    <% } else { %>
+    <input type="number" id="quantityInStock" name="quantityInStock">
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="lore">Lore:</label>
+    <% if(potion) { %>
+    <textarea id="lore" name="lore" rows="10" cols="50"><%= potion.lore %></textarea>
+    <% } else { %>
+    <textarea id="lore" name="lore" rows="10" cols="50"></textarea> <% } %>
+  </div>
+
+  <button class="button" type="submit">Submit</button>
 </form>
 
 <% if (errors) { %>

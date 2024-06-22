@@ -51,8 +51,6 @@ async function potionCreate(
   price,
   quantityInStock,
 ) {
-  const imagePath = './public/major-health-potion.jpg';
-  const imageBuffer = fs.readFileSync(imagePath);
   const potion = new Potion({
     name,
     classification,
@@ -60,7 +58,6 @@ async function potionCreate(
     subEffects,
     price,
     quantityInStock,
-    image: imageBuffer,
   });
   await potion.save();
   potions[index] = potion;

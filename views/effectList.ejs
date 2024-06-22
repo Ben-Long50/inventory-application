@@ -1,0 +1,34 @@
+<h1 class="content-title"><%= title %></h1>
+<% if(effectList.length > 0) { %>
+<ul class="flex-column-list">
+  <% effectList.forEach(effect => { %>
+  <li class="effect-list-item bg-lvl-2">
+    <div class="title-container">
+      <h3 class="list-title"><%= effect.title %></h3>
+      <div class="button-container">
+        <a href="effect/<%= effect._id %>/update">
+          <button class="button">Edit</button>
+        </a>
+        <a href="effect/<%= effect._id %>/delete">
+          <button class="button">Delete</button>
+        </a>
+      </div>
+    </div>
+    <p class="list-desc">Base Stat Bonus: <%= effect.statBonus || 'N/A'%></p>
+    <p class="list-price">Base Duration: <%= effect.duration || 'Immediate'%></p>
+    <% potionList.forEach(potion => { %>
+    <% if(potion.effect.title === effect.title) { %>
+    <div class="potion-list-item bg-lvl-2">
+      <img class="list-image" src="<%= potion.image %>" alt="Potion">
+      <a href="<%= potion.url %>">
+        <h3 class="list-title"><%= potion.name %></h3>
+      </a>
+      <p class="list-desc"><%= potion.description %></p>
+      <p class="list-price">Price: <%= potion.price %></p>
+      <p class="list-qty">In Stock: <%= potion.quantityInStock %></p>
+    </div>
+    <% }}) %>
+  </li>
+  <% }) %>
+</ul>
+<% } %>
