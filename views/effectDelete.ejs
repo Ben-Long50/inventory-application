@@ -1,10 +1,24 @@
 <h1 class="content-title"><%= title %></h1>
 <% if(deleted === false) { %>
-<p>Are you sure you want to delete the <%= effect.title %> effect?</p>
+<% if(!allPotionsInEffect.length > 0) { %>
+<p style="font-size: 1.25rem;">Are you sure you want to delete the <%= effect.title %> effect?</p>
 <form method="POST">
   <button class="button" type="submit">Delete</button>
 </form>
+<% } %>
 <% } else { %>
-<p>You have successfully deleted the <%= effect.name %> effect</p>
+<p style="font-size: 1.25rem;">You have successfully deleted the <%= effect.title %> effect</p>
 <a href="/catalog/effects"><button class="button">Return to Catalog</button></a>
+<% } %>
+<% if(allPotionsInEffect.length > 0) { %>
+<p style="font-size: 1.25rem;">Delete the associated potions before deleting this effect:</p>
+<ul class="desc-list" style="font-size: 1.25rem;">
+  <% allPotionsInEffect.forEach(potion => { %>
+  <li>
+    <a href="<%= potion.url %>">
+      <p class="delete-item"><%= potion.name %></p>
+    </a>
+  </li>
+  <% }) %>
+</ul>
 <% } %>

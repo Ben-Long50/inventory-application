@@ -20,7 +20,18 @@
 }
 
 .button {
+  border: solid rgb(255, 255, 255, 0.5) 1px;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: rgb(255, 255, 255, 0.5);
   font-size: 1.25rem;
+}
+
+.button:hover {
+  border: solid white 1px;
+  background-color: rgb(255, 255, 255, 0.25);
+  color: white;
 }
 
 input,

@@ -134,26 +134,47 @@ const classificationController = {
 
   classificationDeleteGet: asyncHandler(async (req, res, next) => {
     const classification = await Classification.findById(req.params.id).exec();
+    const allPotionsInClassification = await Potion.find({
+      classification: req.params.id,
+    }).exec();
+
     const deleted = false;
 
     res.render('classificationDelete', {
       title: 'Delete Classification',
       classification,
+      allPotionsInClassification,
       deleted,
     });
   }),
 
   classificationDeletePost: asyncHandler(async (req, res, next) => {
     const classification = await Classification.findById(req.params.id).exec();
-    const deleted = true;
+    const allPotionsInClassification = await Potion.find({
+      classification: req.params.id,
+    }).exec();
 
-    res.render('classificationDelete', {
-      title: 'Delete Classification',
-      classification,
-      deleted,
-    });
+    if (allPotionsInClassification.length > 0) {
+      const deleted = false;
 
-    await Classification.findByIdAndDelete(req.params.id);
+      res.render('classificationDelete', {
+        title: 'Delete Classification',
+        classification,
+        allPotionsInClassification,
+        deleted,
+      });
+    } else {
+      const deleted = true;
+
+      res.render('classificationDelete', {
+        title: 'Delete Classification',
+        classification,
+        allPotionsInClassification,
+        deleted,
+      });
+
+      await Classification.findByIdAndDelete(req.params.id);
+    }
   }),
 };
 

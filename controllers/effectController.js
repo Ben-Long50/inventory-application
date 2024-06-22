@@ -76,38 +76,84 @@ const effectController = {
     });
   }),
 
-  effectUpdatePost: asyncHandler(async (req, res, next) => {
-    const effect = await Effect.findById(req.params.id).exec();
+  effectUpdatePost: [
+    body('title', 'Title must not be empty.')
+      .trim()
+      .isLength({ min: 1 })
+      .escape(),
 
-    res.render('effectForm', {
-      title: 'Update Effect',
-      effect,
-      errors: undefined,
-    });
-  }),
+    body('statBonus').trim().escape(),
+
+    body('duration', 'Duration must be a non-negative number')
+      .trim()
+      .isInt({ min: 0 })
+      .escape(),
+
+    asyncHandler(async (req, res, next) => {
+      const errors = validationResult(req);
+
+      const effect = new Effect({
+        title: req.body.title,
+        statBonus: req.body.statBonus,
+        duration: req.body.duration,
+      });
+
+      if (!errors.isEmpty()) {
+        res.render('effectForm', {
+          title: 'Create An Effect',
+          effect,
+          errors: errors.array(),
+        });
+      } else {
+        await effect.save();
+        res.redirect('/catalog/effects');
+      }
+    }),
+  ],
 
   effectDeleteGet: asyncHandler(async (req, res, next) => {
     const effect = await Effect.findById(req.params.id).exec();
+    const allPotionsInEffect = await Potion.find({
+      effect: req.params.id,
+    }).exec();
+
     const deleted = false;
 
     res.render('effectDelete', {
       title: 'Delete Effect',
       effect,
+      allPotionsInEffect,
       deleted,
     });
   }),
 
   effectDeletePost: asyncHandler(async (req, res, next) => {
     const effect = await Effect.findById(req.params.id).exec();
-    const deleted = true;
+    const allPotionsInEffect = await Potion.find({
+      effect: req.params.id,
+    }).exec();
 
-    res.render('effectDelete', {
-      title: 'Delete Effect',
-      effect,
-      deleted,
-    });
+    if (allPotionsInEffect.length > 0) {
+      const deleted = false;
 
-    await Effect.findByIdAndDelete(req.params.id);
+      res.render('effectDelete', {
+        title: 'Delete Effect',
+        effect,
+        allPotionsInEffect,
+        deleted,
+      });
+    } else {
+      const deleted = true;
+
+      res.render('effectDelete', {
+        title: 'Delete Effect',
+        effect,
+        allPotionsInEffect,
+        deleted,
+      });
+
+      await Effect.findByIdAndDelete(req.params.id);
+    }
   }),
 };
 

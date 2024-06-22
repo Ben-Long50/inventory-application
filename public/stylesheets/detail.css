@@ -11,10 +11,29 @@
 .main-detail {
   display: grid;
   grid-template-columns: auto auto;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto 1fr;
   grid-template-areas: 'image title' 'image desc';
   column-gap: 2rem;
   align-items: center;
   min-height: 200px;
   padding-right: 2rem;
+}
+
+.detail-title {
+  font-size: 2rem;
+  grid-area: title;
+}
+
+.detail-desc {
+  font-size: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  grid-area: desc;
+  margin-top: 2rem;
+}
+
+.effect-list {
+  display: flex;
+  gap: 1rem;
 }

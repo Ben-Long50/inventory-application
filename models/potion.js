@@ -9,7 +9,7 @@ const PotionSchema = new Schema({
     ref: 'Classification',
     required: true,
   },
-  description: { type: String },
+  description: [{ type: String }],
   effect: { type: Schema.Types.ObjectId, ref: 'Effect', required: true },
   subEffects: [{ type: Schema.Types.ObjectId, ref: 'Effect' }],
   price: { type: Number, required: true },

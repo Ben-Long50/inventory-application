@@ -112,59 +112,70 @@ const potionController = {
 
       const { title, multiplier, subMultiplier } = req.classification;
       const { statBonus, title: effectTitle, duration } = req.effect;
-      let description = '';
-      let subEffectString = '';
+
+      const mainBonus = statBonus > 0 ? multiplier * statBonus : '';
+      const mainEffectDesc =
+        duration > 0
+          ? `${mainBonus} ${effectTitle} for ${multiplier * duration} seconds`
+          : `${mainBonus} ${effectTitle} immediately`;
+
+      const description = [mainEffectDesc];
 
       if (req.subEffects) {
         req.subEffects.forEach((subEffect) => {
-          subEffectString += `, ${subMultiplier * subEffect.statBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`;
-        });
-        description = `Grants the consumer ${multiplier * statBonus} ${effectTitle} for ${multiplier * duration} seconds${subEffectString}`;
-      } else {
-        description = `Grants the consumer ${multiplier * statBonus} ${effectTitle} for ${multiplier * duration} seconds`;
-      }
-
-      const name = `${title} Potion of ${effectTitle}`;
-
-      // Create a Book object with escaped and trimmed data.
-      const potion = new Potion({
-        name,
-        classification: req.classification._id,
-        description,
-        effect: req.effect._id,
-        subEffects: !req.subEffects
-          ? null
-          : req.subEffects.map((effect) => effect._id),
-        price: req.body.price,
-        quantityInStock: req.body.quantityInStock,
-        lore: req.body.lore,
-      });
-
-      if (!errors.isEmpty()) {
-        // There are errors. Render form again with sanitized values/error messages.
-
-        // Get all authors and genres for form.
-        const [classifications, effects] = await Promise.all([
-          Classification.find().sort({ title: 1 }).exec(),
-          Effect.find().sort({ title: 1 }).exec(),
-        ]);
-
-        effects.forEach((item) => {
-          if (potion.subEffects.includes(item._id)) {
-            subEffect.checked = 'true';
+          const subBonus =
+            subEffect.statBonus > 0 ? subMultiplier * subEffect.statBonus : '';
+          if (subEffect.duration > 0) {
+            description.push(
+              `${subBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`,
+            );
+          } else {
+            description.push(`${subBonus} ${subEffect.title} immediately`);
           }
         });
 
-        res.render('potionForm', {
-          title: 'Create A Potion',
-          classifications,
-          effects,
-          errors: errors.array(),
+        const name = `${title} Potion of ${effectTitle}`;
+
+        // Create a Book object with escaped and trimmed data.
+        const potion = new Potion({
+          name,
+          classification: req.classification._id,
+          description,
+          effect: req.effect._id,
+          subEffects: !req.subEffects
+            ? null
+            : req.subEffects.map((effect) => effect._id),
+          price: req.body.price,
+          quantityInStock: req.body.quantityInStock,
+          lore: req.body.lore,
         });
-      } else {
-        // Data from form is valid. Save book.
-        await potion.save();
-        res.redirect(potion.url);
+
+        if (!errors.isEmpty()) {
+          // There are errors. Render form again with sanitized values/error messages.
+
+          // Get all authors and genres for form.
+          const [classifications, effects] = await Promise.all([
+            Classification.find().sort({ title: 1 }).exec(),
+            Effect.find().sort({ title: 1 }).exec(),
+          ]);
+
+          effects.forEach((item) => {
+            if (potion.subEffects.includes(item._id)) {
+              subEffect.checked = 'true';
+            }
+          });
+
+          res.render('potionForm', {
+            title: 'Create A Potion',
+            classifications,
+            effects,
+            errors: errors.array(),
+          });
+        } else {
+          // Data from form is valid. Save book.
+          await potion.save();
+          res.redirect(potion.url);
+        }
       }
     }),
   ],
@@ -280,64 +291,75 @@ const potionController = {
 
       const { title, multiplier, subMultiplier } = req.classification;
       const { statBonus, title: effectTitle, duration } = req.effect;
-      let description = '';
-      let subEffectString = '';
+
+      const mainBonus = statBonus > 0 ? multiplier * statBonus : '';
+      const mainEffectDesc =
+        duration > 0
+          ? `${mainBonus} ${effectTitle} for ${multiplier * duration} seconds`
+          : `${mainBonus} ${effectTitle} immediately`;
+
+      const description = [mainEffectDesc];
 
       if (req.subEffects) {
         req.subEffects.forEach((subEffect) => {
-          subEffectString += `, ${subMultiplier * subEffect.statBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`;
+          const subBonus =
+            subEffect.statBonus > 0 ? subMultiplier * subEffect.statBonus : '';
+          if (subEffect.duration > 0) {
+            description.push(
+              `${subBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`,
+            );
+          } else {
+            description.push(`${subBonus} ${subEffect.title} immediately`);
+          }
         });
-        description = `Grants the consumer ${multiplier * statBonus} ${effectTitle} for ${multiplier * duration} seconds${subEffectString}`;
-      } else {
-        description = `Grants the consumer ${multiplier * statBonus} ${effectTitle} for ${multiplier * duration} seconds`;
-      }
 
-      const name = `${title} Potion of ${effectTitle}`;
+        const name = `${title} Potion of ${effectTitle}`;
 
-      // Create a Book object with escaped and trimmed data.
-      const potion = new Potion({
-        name,
-        classification: req.classification._id,
-        description,
-        effect: req.effect._id,
-        subEffects: !req.subEffects
-          ? null
-          : req.subEffects.map((effect) => effect._id),
-        price: req.body.price,
-        quantityInStock: req.body.quantityInStock,
-        lore: req.body.lore,
-        _id: req.params.id,
-      });
+        // Create a Book object with escaped and trimmed data.
+        const potion = new Potion({
+          name,
+          classification: req.classification._id,
+          description,
+          effect: req.effect._id,
+          subEffects: !req.subEffects
+            ? null
+            : req.subEffects.map((effect) => effect._id),
+          price: req.body.price,
+          quantityInStock: req.body.quantityInStock,
+          lore: req.body.lore,
+          _id: req.params.id,
+        });
 
-      if (!errors.isEmpty()) {
-        // There are errors. Render form again with sanitized values/error messages.
+        if (!errors.isEmpty()) {
+          // There are errors. Render form again with sanitized values/error messages.
 
-        // Get all authors and genres for form.
-        const [classifications, effects] = await Promise.all([
-          Classification.find().sort({ title: 1 }).exec(),
-          Effect.find().sort({ title: 1 }).exec(),
-        ]);
+          // Get all authors and genres for form.
+          const [classifications, effects] = await Promise.all([
+            Classification.find().sort({ title: 1 }).exec(),
+            Effect.find().sort({ title: 1 }).exec(),
+          ]);
 
-        let subEffectTitles = [];
+          let subEffectTitles = [];
 
-        if (potion.subEffects) {
-          subEffectTitles = potion.subEffects.map((effect) => effect.title);
+          if (potion.subEffects) {
+            subEffectTitles = potion.subEffects.map((effect) => effect.title);
+          }
+
+          res.render('potionForm', {
+            title: 'Edit Potion',
+            classifications,
+            effects,
+            subEffectTitles,
+            potion,
+            errors: errors.array(),
+          });
+        } else {
+          const updatedPotion = await Potion.findByIdAndUpdate(
+            req.params.id,
+            potion,
+          );
+          res.redirect(updatedPotion.url);
         }
-
-        res.render('potionForm', {
-          title: 'Edit Potion',
-          classifications,
-          effects,
-          subEffectTitles,
-          potion,
-          errors: errors.array(),
-        });
-      } else {
-        const updatedPotion = await Potion.findByIdAndUpdate(
-          req.params.id,
-          potion,
-        );
-        res.redirect(updatedPotion.url);
       }
     }),
   ],
