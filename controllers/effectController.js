@@ -36,12 +36,12 @@ const effectController = {
 
     body('statBonus', 'Stat Bonus must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     body('duration', 'Duration must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     asyncHandler(async (req, res, next) => {
@@ -82,11 +82,14 @@ const effectController = {
       .isLength({ min: 1 })
       .escape(),
 
-    body('statBonus').trim().escape(),
+    body('statBonus', 'Stat Bonus must be a non-negative number')
+      .trim()
+      .isFloat({ min: 0 })
+      .escape(),
 
     body('duration', 'Duration must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     asyncHandler(async (req, res, next) => {

@@ -36,12 +36,12 @@ const classificationController = {
 
     body('multiplier', 'Primary multiplier must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     body('subMultiplier', 'Secondary multiplier must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     // Process request after validation and sanitization.
@@ -93,12 +93,12 @@ const classificationController = {
 
     body('multiplier', 'Primary multiplier must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     body('subMultiplier', 'Secondary multiplier must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
+      .isFloat({ min: 0 })
       .escape(),
 
     // Process request after validation and sanitization.
