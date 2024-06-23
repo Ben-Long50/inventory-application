@@ -14,12 +14,19 @@
   grid-template-rows: auto 1fr;
   grid-template-areas: 'image title' 'image desc';
   column-gap: 2rem;
-  align-items: center;
   min-height: 200px;
   padding-right: 2rem;
 }
 
+.detail-image {
+  height: clamp(200px, 20vw, 500px);
+  grid-area: image;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.5rem;
+}
+
 .detail-title {
+  margin-top: 2rem;
   font-size: 2rem;
   grid-area: title;
 }
@@ -30,7 +37,7 @@
   flex-direction: column;
   gap: 0.75rem;
   grid-area: desc;
-  margin-top: 2rem;
+  margin-top: 3rem;
 }
 
 .effect-list {

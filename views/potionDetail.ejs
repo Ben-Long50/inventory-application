@@ -1,7 +1,7 @@
 <h1 class="content-title"><%= title %></h1>
 <div class="detail bg-lvl-2">
   <div class="main-detail">
-    <img class="list-image" src="<%= potion.image %>" alt="Potion">
+    <img class="detail-image" src="<%= potion.image %>" alt="Potion">
     <h3 class="detail-title"><%= potion.name %></h3>
     <div class="detail-desc">
       <h4>Grants the Consumer:</h4>
@@ -33,7 +33,7 @@
   <p>In Stock: <%= potion.quantityInStock %></p>
   <p>Lore:</p>
   <p class="lore"><%= potion.lore %></p>
-  <div>
+  <div class="button-container">
     <a href="/catalog/potion/<%= potion._id %>/update"><button class="button">Edit Potion</button></a>
     <a href="/catalog/potion/<%= potion._id %>/delete"><button class="button">Delete Potion</button></a>
   </div>

@@ -13,18 +13,18 @@
   <div class="form-group">
     <label for="multiplier">Primary Multiplier:</label>
     <% if(classification) { %>
-    <input type="number" id="multiplier" name="multiplier" value="<%= classification.multiplier %>"></input>
+    <input type="number" id="multiplier" name="multiplier" step="0.1" value="<%= classification.multiplier %>"></input>
     <% } else { %>
-    <input type="number" id="multiplier" name="multiplier" value="" placeholder="--Please Input a Classification Primary Multiplier--"></input>
+    <input type="number" id="multiplier" name="multiplier" step="0.1" value="" placeholder="--Please Input a Classification Primary Multiplier--"></input>
     <% } %>
   </div>
 
   <div class="form-group">
     <label for="subMultiplier">Secondary Multiplier:</label>
     <% if(classification) { %>
-    <input type="number" id="subMultiplier" name="subMultiplier" value="<%= classification.subMultiplier %>"></input>
+    <input type="number" id="subMultiplier" name="subMultiplier" step="0.1" value="<%= classification.subMultiplier %>"></input>
     <% } else { %>
-    <input type="number" id="subMultiplier" name="subMultiplier" value="" placeholder="--Please Input a Classification Secondary Multiplier--"></input>
+    <input type="number" id="subMultiplier" name="subMultiplier" step="0.1" value="" placeholder="--Please Input a Classification Secondary Multiplier--"></input>
     <% } %>
   </div>
 
