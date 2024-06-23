@@ -1,7 +1,9 @@
 <h1 class="content-title"><%= title %></h1>
 
-<form class="form bg-lvl-2" method="POST">
+<form class="form bg-lvl-2" method="POST" enctype="multipart/form-data">
   <div class="form-group">
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image">
     <label for="classification">Classification:</label>
     <select id="classification" class="form-control" name="classification" required>
       <% if(potion) { %>

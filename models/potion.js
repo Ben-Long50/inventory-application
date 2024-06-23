@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const PotionSchema = new Schema({
+  image: { type: String },
   name: { type: String },
   classification: {
     type: Schema.Types.ObjectId,

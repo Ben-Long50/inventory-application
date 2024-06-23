@@ -32,7 +32,14 @@ const limiter = RateLimit({
   max: 100,
 });
 
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
+    },
+  }),
+);
 app.use(expressLayouts);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

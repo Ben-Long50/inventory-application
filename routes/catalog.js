@@ -1,6 +1,4 @@
 import express from 'express';
-
-// Require controller modules.
 import potionController from '../controllers/potionController.js';
 import classificationController from '../controllers/classificationController.js';
 import effectController from '../controllers/effectController.js';

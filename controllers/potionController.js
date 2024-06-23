@@ -3,8 +3,8 @@ import { body, validationResult } from 'express-validator';
 import Potion from '../models/potion.js';
 import Classification from '../models/classification.js';
 import Effect from '../models/effect.js';
-import classification from '../models/classification.js';
-import effect from '../models/effect.js';
+import cloudinary from '../utils/cloudinary.js';
+import upload from '../utils/multer.js';
 
 const potionController = {
   potionList: asyncHandler(async (req, res, next) => {
@@ -50,53 +50,55 @@ const potionController = {
   }),
 
   potionCreatePost: [
-    // Convert the genre to an array.
-    (req, res, next) => {
-      if (!Array.isArray(req.body.subEffect)) {
-        req.body.subEffect =
-          typeof req.body.subEffect === 'undefined' ? [] : [req.body.subEffect];
+    upload.single('image'),
+    asyncHandler(async (req, res, next) => {
+      if (req.file) {
+        try {
+          const result = await cloudinary.uploader.upload(req.file.path);
+          req.imageURL = result.secure_url;
+        } catch (err) {
+          console.error(err);
+          return res.status(500).json({
+            success: false,
+            message: 'Error uploading to Cloudinary',
+          });
+        }
       }
-      console.log(req.body.subEffect);
       next();
-    },
-
-    // Validate and sanitize fields.
+    }),
     body('classification', 'Classification must not be empty.')
       .trim()
       .isLength({ min: 1 })
       .escape()
-      .custom((value, { req }) =>
-        Classification.findById(value).then((classification) => {
-          if (!classification) {
-            return Promise.reject('Invalid classification');
-          }
-          req.classification = classification;
-        }),
-      ),
+      .custom(async (value, { req }) => {
+        const classification = await Classification.findById(value);
+        if (!classification) {
+          return Promise.reject('Invalid classification');
+        }
+        req.classification = classification;
+      }),
     body('effect', 'Primary Effect must not be empty.')
       .trim()
       .isLength({ min: 1 })
       .escape()
-      .custom((value, { req }) =>
-        Effect.findById(value).then((effect) => {
-          if (!effect) {
-            return Promise.reject('Invalid effect');
-          }
-          req.effect = effect;
-        }),
-      ),
+      .custom(async (value, { req }) => {
+        const effect = await Effect.findById(value);
+        if (!effect) {
+          return Promise.reject('Invalid effect');
+        }
+        req.effect = effect;
+      }),
     body('subEffect.*')
       .optional()
       .escape()
-      .custom((value, { req }) =>
-        Effect.findById(value).then((effect) => {
-          if (!effect) {
-            return Promise.reject('Invalid subEffect');
-          }
-          req.subEffects = req.subEffects || [];
-          req.subEffects.push(effect);
-        }),
-      ),
+      .custom(async (value, { req }) => {
+        const effect = await Effect.findById(value);
+        if (!effect) {
+          return Promise.reject('Invalid subEffect');
+        }
+        req.subEffects = req.subEffects || [];
+        req.subEffects.push(effect);
+      }),
     body('price', 'Price must not be empty').trim().isInt({ min: 0 }).escape(),
     body('quantityInStock', 'In Stock must not be empty')
       .trim()
@@ -104,10 +106,7 @@ const potionController = {
       .escape(),
     body('lore').optional().trim().escape(),
 
-    // Process request after validation and sanitization.
-
-    asyncHandler(async (req, res, next) => {
-      // Extract the validation errors from a request.
+    asyncHandler(async (req, res) => {
       const errors = validationResult(req);
 
       const { title, multiplier, subMultiplier } = req.classification;
@@ -125,57 +124,52 @@ const potionController = {
         req.subEffects.forEach((subEffect) => {
           const subBonus =
             subEffect.statBonus > 0 ? subMultiplier * subEffect.statBonus : '';
-          if (subEffect.duration > 0) {
-            description.push(
-              `${subBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`,
-            );
-          } else {
-            description.push(`${subBonus} ${subEffect.title} immediately`);
+          const subEffectDesc =
+            subEffect.duration > 0
+              ? `${subBonus} ${subEffect.title} for ${subMultiplier * subEffect.duration} seconds`
+              : `${subBonus} ${subEffect.title} immediately`;
+          description.push(subEffectDesc);
+        });
+      }
+
+      const name = `${title} Potion of ${effectTitle}`;
+
+      const potion = new Potion({
+        image: req.imageURL,
+        name,
+        classification: req.classification._id,
+        description,
+        effect: req.effect._id,
+        subEffects: req.subEffects
+          ? req.subEffects.map((effect) => effect._id)
+          : null,
+        price: req.body.price,
+        quantityInStock: req.body.quantityInStock,
+        lore: req.body.lore,
+      });
+
+      if (!errors.isEmpty()) {
+        const [classifications, effects] = await Promise.all([
+          Classification.find().sort({ title: 1 }).exec(),
+          Effect.find().sort({ title: 1 }).exec(),
+        ]);
+
+        effects.forEach((item) => {
+          if (potion.subEffects && potion.subEffects.includes(item._id)) {
+            item.checked = 'true';
           }
         });
 
-        const name = `${title} Potion of ${effectTitle}`;
-
-        // Create a Book object with escaped and trimmed data.
-        const potion = new Potion({
-          name,
-          classification: req.classification._id,
-          description,
-          effect: req.effect._id,
-          subEffects: !req.subEffects
-            ? null
-            : req.subEffects.map((effect) => effect._id),
-          price: req.body.price,
-          quantityInStock: req.body.quantityInStock,
-          lore: req.body.lore,
+        res.render('potionForm', {
+          title: 'Create A Potion',
+          classifications,
+          effects,
+          potion,
+          errors: errors.array(),
         });
-
-        if (!errors.isEmpty()) {
-          // There are errors. Render form again with sanitized values/error messages.
-
-          // Get all authors and genres for form.
-          const [classifications, effects] = await Promise.all([
-            Classification.find().sort({ title: 1 }).exec(),
-            Effect.find().sort({ title: 1 }).exec(),
-          ]);
-
-          effects.forEach((item) => {
-            if (potion.subEffects.includes(item._id)) {
-              subEffect.checked = 'true';
-            }
-          });
-
-          res.render('potionForm', {
-            title: 'Create A Potion',
-            classifications,
-            effects,
-            errors: errors.array(),
-          });
-        } else {
-          // Data from form is valid. Save book.
-          await potion.save();
-          res.redirect(potion.url);
-        }
+      } else {
+        await potion.save();
+        res.redirect(potion.url);
       }
     }),
   ],
@@ -230,52 +224,55 @@ const potionController = {
   }),
 
   potionUpdatePost: [
-    (req, res, next) => {
-      if (!Array.isArray(req.body.subEffect)) {
-        req.body.subEffect =
-          typeof req.body.subEffect === 'undefined' ? [] : [req.body.subEffect];
+    upload.single('image'),
+    asyncHandler(async (req, res, next) => {
+      if (req.file) {
+        try {
+          const result = await cloudinary.uploader.upload(req.file.path);
+          req.imageURL = result.secure_url;
+        } catch (err) {
+          console.error(err);
+          return res.status(500).json({
+            success: false,
+            message: 'Error uploading to Cloudinary',
+          });
+        }
       }
-      console.log(req.body.subEffect);
       next();
-    },
-
-    // Validate and sanitize fields.
+    }),
     body('classification', 'Classification must not be empty.')
       .trim()
       .isLength({ min: 1 })
       .escape()
-      .custom((value, { req }) =>
-        Classification.findById(value).then((classification) => {
-          if (!classification) {
-            return Promise.reject('Invalid classification');
-          }
-          req.classification = classification;
-        }),
-      ),
+      .custom(async (value, { req }) => {
+        const classification = await Classification.findById(value);
+        if (!classification) {
+          return Promise.reject('Invalid classification');
+        }
+        req.classification = classification;
+      }),
     body('effect', 'Primary Effect must not be empty.')
       .trim()
       .isLength({ min: 1 })
       .escape()
-      .custom((value, { req }) =>
-        Effect.findById(value).then((effect) => {
-          if (!effect) {
-            return Promise.reject('Invalid effect');
-          }
-          req.effect = effect;
-        }),
-      ),
+      .custom(async (value, { req }) => {
+        const effect = await Effect.findById(value);
+        if (!effect) {
+          return Promise.reject('Invalid effect');
+        }
+        req.effect = effect;
+      }),
     body('subEffect.*')
       .optional()
       .escape()
-      .custom((value, { req }) =>
-        Effect.findById(value).then((effect) => {
-          if (!effect) {
-            return Promise.reject('Invalid subEffect');
-          }
-          req.subEffects = req.subEffects || [];
-          req.subEffects.push(effect);
-        }),
-      ),
+      .custom(async (value, { req }) => {
+        const effect = await Effect.findById(value);
+        if (!effect) {
+          return Promise.reject('Invalid subEffect');
+        }
+        req.subEffects = req.subEffects || [];
+        req.subEffects.push(effect);
+      }),
     body('price', 'Price must be a non-negative number')
       .trim()
       .isInt({ min: 0 })
@@ -312,54 +309,48 @@ const potionController = {
             description.push(`${subBonus} ${subEffect.title} immediately`);
           }
         });
+      }
 
-        const name = `${title} Potion of ${effectTitle}`;
+      const name = `${title} Potion of ${effectTitle}`;
 
-        // Create a Book object with escaped and trimmed data.
-        const potion = new Potion({
-          name,
-          classification: req.classification._id,
-          description,
-          effect: req.effect._id,
-          subEffects: !req.subEffects
-            ? null
-            : req.subEffects.map((effect) => effect._id),
-          price: req.body.price,
-          quantityInStock: req.body.quantityInStock,
-          lore: req.body.lore,
-          _id: req.params.id,
+      const potionData = {
+        _id: req.params.id, // Ensure the _id is set correctly for the update
+        name,
+        classification: req.classification._id,
+        description,
+        effect: req.effect._id,
+        subEffects: req.subEffects
+          ? req.subEffects.map((effect) => effect._id)
+          : null,
+        price: req.body.price,
+        quantityInStock: req.body.quantityInStock,
+        lore: req.body.lore,
+      };
+
+      if (req.imageURL) {
+        potionData.image = req.imageURL;
+      }
+
+      if (!errors.isEmpty()) {
+        const [classifications, effects] = await Promise.all([
+          Classification.find().sort({ title: 1 }).exec(),
+          Effect.find().sort({ title: 1 }).exec(),
+        ]);
+
+        res.render('potionForm', {
+          title: 'Edit Potion',
+          classifications,
+          effects,
+          potion: potionData,
+          errors: errors.array(),
         });
-
-        if (!errors.isEmpty()) {
-          // There are errors. Render form again with sanitized values/error messages.
-
-          // Get all authors and genres for form.
-          const [classifications, effects] = await Promise.all([
-            Classification.find().sort({ title: 1 }).exec(),
-            Effect.find().sort({ title: 1 }).exec(),
-          ]);
-
-          let subEffectTitles = [];
-
-          if (potion.subEffects) {
-            subEffectTitles = potion.subEffects.map((effect) => effect.title);
-          }
-
-          res.render('potionForm', {
-            title: 'Edit Potion',
-            classifications,
-            effects,
-            subEffectTitles,
-            potion,
-            errors: errors.array(),
-          });
-        } else {
-          const updatedPotion = await Potion.findByIdAndUpdate(
-            req.params.id,
-            potion,
-          );
-          res.redirect(updatedPotion.url);
-        }
+      } else {
+        const updatedPotion = await Potion.findByIdAndUpdate(
+          req.params.id,
+          potionData,
+          { new: true },
+        );
+        res.redirect(updatedPotion.url);
       }
     }),
   ],

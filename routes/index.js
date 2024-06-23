@@ -4,7 +4,7 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', { title: 'The Apothecary' });
+  res.redirect('catalog/potions');
 });
 
 export default router;

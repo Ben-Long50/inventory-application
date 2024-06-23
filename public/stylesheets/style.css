@@ -37,13 +37,13 @@ hr {
 
 .layout-container {
   display: grid;
-  grid-template-columns: clamp(300px, 20vw, 500px) 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-areas: 'navbar content';
 }
 
 .logo {
   font-family: 'Ankh';
-  font-size: clamp(2.25rem, 2.5vw, 4rem);
+  font-size: clamp(3rem, 2.5vw, 4rem);
   margin-bottom: 2rem;
 }
 
@@ -77,14 +77,16 @@ hr {
   gap: 2rem;
   padding: 2rem;
   padding-top: 4rem;
-  align-items: center;
+  padding-left: 8rem;
+  align-items: flex-start;
 }
 
 .content-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  max-width: 1500px;
+  width: 100%;
+  max-width: 1300px;
 }
 
 .content-title {
@@ -98,25 +100,28 @@ hr {
 }
 
 .potion-list-item {
+  box-sizing: border-box;
+  width: 100%;
   display: grid;
   grid-template-columns: auto 1fr auto;
-  grid-template-rows: 6rem auto;
+  grid-template-rows: 4rem auto;
   grid-template-areas:
     'image title price'
     'image desc qty';
   column-gap: 2rem;
+  row-gap: 1rem;
   align-items: start;
   min-height: 200px;
   border-radius: 0.5rem;
+  padding: 1rem;
   padding-right: 2rem;
 }
 
 .list-image {
-  height: 100%;
+  max-height: 275px;
   aspect-ratio: 1 / 1;
   grid-area: image;
-  border: solid white 1px;
-  border-radius: 0.5rem 0 0 0.5rem;
+  border-radius: 0.5rem;
 }
 
 .title {
@@ -126,7 +131,7 @@ hr {
 .list-title {
   font-size: 2rem;
   grid-area: title;
-  margin-top: 2rem;
+  padding-top: 1rem;
 }
 
 .list-title:hover,
