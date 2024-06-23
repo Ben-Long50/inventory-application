@@ -93,12 +93,14 @@ const potionController = {
       .escape()
       .customSanitizer((value) => (Array.isArray(value) ? value : [value]))
       .custom(async (value, { req }) => {
-        const effect = await Effect.findById(value);
-        if (!effect) {
-          return Promise.reject('Invalid subEffect');
+        req.subEffects = [];
+        for (const effectId of value) {
+          const effect = await Effect.findById(effectId);
+          if (!effect) {
+            return Promise.reject('Invalid subEffect');
+          }
+          req.subEffects.push(effect);
         }
-        req.subEffects = req.subEffects || [];
-        req.subEffects.push(effect);
       }),
     body('price', 'Price must not be empty').trim().isInt({ min: 0 }).escape(),
     body('quantityInStock', 'In Stock must not be empty')
@@ -268,12 +270,14 @@ const potionController = {
       .escape()
       .customSanitizer((value) => (Array.isArray(value) ? value : [value]))
       .custom(async (value, { req }) => {
-        const effect = await Effect.findById(value);
-        if (!effect) {
-          return Promise.reject('Invalid subEffect');
+        req.subEffects = [];
+        for (const effectId of value) {
+          const effect = await Effect.findById(effectId);
+          if (!effect) {
+            return Promise.reject('Invalid subEffect');
+          }
+          req.subEffects.push(effect);
         }
-        req.subEffects = req.subEffects || [];
-        req.subEffects.push(effect);
       }),
     body('price', 'Price must be a non-negative number')
       .trim()
