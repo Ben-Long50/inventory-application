@@ -3,6 +3,10 @@
   src: url('../Ankh.ttf');
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body,
 .layout-container {
@@ -62,7 +66,6 @@ hr {
 
 .nav-item {
   padding: 1rem;
-  transition: transform;
 }
 
 .nav-item:hover {
@@ -75,9 +78,7 @@ hr {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2rem;
-  padding-top: 4rem;
-  padding-left: 8rem;
+  padding: 4rem;
   align-items: flex-start;
 }
 
@@ -192,4 +193,80 @@ hr {
 .button-container {
   display: flex;
   gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .content {
+    width: 100vw;
+    padding: 1.5rem;
+  }
+
+  .layout-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 'navbar' 'content';
+  }
+
+  .navbar:hover .nav-list {
+    display: flex;
+  }
+
+  .nav-list {
+    width: 100vw;
+    display: none;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+
+  .navbar {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    padding: 1rem;
+    grid-area: navbar;
+    position: sticky;
+    top: 0;
+  }
+
+  .nav-item {
+    padding: 1.5rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .logo {
+    margin-bottom: 0;
+  }
+
+  .potion-list-item {
+    box-sizing: border-box;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      'image'
+      'title'
+      'desc'
+      'price'
+      'qty';
+    column-gap: 2rem;
+    row-gap: 1rem;
+    align-items: center;
+    justify-items: center;
+    min-height: 200px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  .list-qty {
+    margin: 0;
+  }
+
+  .list-image {
+    aspect-ratio: 1 / 1;
+    max-height: none;
+    width: 100%;
+  }
 }
