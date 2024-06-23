@@ -51,17 +51,22 @@ hr {
   margin-bottom: 2rem;
 }
 
+.nav-container {
+  grid-area: navbar;
+  height: 100%;
+  position: sticky;
+  top: 2rem;
+}
+
 .navbar {
+  height: 100%;
   font-size: 1.5rem;
   padding: 2rem;
-  grid-area: navbar;
 }
 
 .nav-list {
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 2rem;
 }
 
 .nav-item {
@@ -206,6 +211,10 @@ hr {
     grid-template-columns: auto;
     grid-template-rows: auto 1fr;
     grid-template-areas: 'navbar' 'content';
+  }
+
+  .nav-container {
+    top: 0;
   }
 
   .navbar:hover .nav-list {
