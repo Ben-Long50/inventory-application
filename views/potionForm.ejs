@@ -35,7 +35,7 @@
     <label>Secondary Effects:</label>
     <ul class="check-list">
       <% effects.forEach(function(effect) { %>
-      <li>
+      <li class="check-box">
         <% if (subEffectTitles.includes(effect.title)) { %>
         <input type="checkbox" class="checkbox-input" name="subEffect" id="<%= effect._id %>" value="<%= effect._id %>" checked>
         <% } else { %>

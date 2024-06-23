@@ -5,6 +5,7 @@
 
 * {
   box-sizing: border-box;
+  line-height: 1.75rem;
 }
 
 html,
@@ -96,7 +97,7 @@ hr {
 }
 
 .content-title {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
 }
 
 .flex-column-list {
@@ -131,11 +132,11 @@ hr {
 }
 
 .title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
 }
 
 .list-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   grid-area: title;
   padding-top: 1rem;
 }
