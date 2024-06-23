@@ -55,8 +55,6 @@ hr {
 .nav-container {
   grid-area: navbar;
   height: 100%;
-  position: sticky;
-  top: 2rem;
 }
 
 .navbar {
@@ -68,6 +66,8 @@ hr {
 .nav-list {
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 1rem;
 }
 
 .nav-item {
@@ -214,12 +214,13 @@ hr {
     grid-template-areas: 'navbar' 'content';
   }
 
-  .nav-container {
-    top: 0;
-  }
-
   .navbar:hover .nav-list {
     display: flex;
+  }
+
+  .nav-container {
+    position: sticky;
+    top: 0;
   }
 
   .nav-list {
@@ -236,8 +237,6 @@ hr {
     font-size: 1.5rem;
     padding: 1rem;
     grid-area: navbar;
-    position: sticky;
-    top: 0;
   }
 
   .nav-item {
@@ -263,15 +262,22 @@ hr {
       'qty';
     column-gap: 2rem;
     row-gap: 1rem;
-    align-items: center;
-    justify-items: center;
+    align-items: start;
+    justify-items: start;
     min-height: 200px;
     border-radius: 0.5rem;
     padding: 1rem;
   }
 
-  .list-qty {
+  .list-title,
+  .list-desc {
+    padding-left: 1rem;
+  }
+
+  .list-qty,
+  .list-price {
     margin: 0;
+    padding-right: 1rem;
   }
 
   .list-image {

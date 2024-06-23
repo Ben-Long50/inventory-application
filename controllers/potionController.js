@@ -88,9 +88,10 @@ const potionController = {
         }
         req.effect = effect;
       }),
-    body('subEffect.*')
+    body('subEffect')
       .optional()
       .escape()
+      .customSanitizer((value) => (Array.isArray(value) ? value : [value]))
       .custom(async (value, { req }) => {
         const effect = await Effect.findById(value);
         if (!effect) {
@@ -262,9 +263,10 @@ const potionController = {
         }
         req.effect = effect;
       }),
-    body('subEffect.*')
+    body('subEffect')
       .optional()
       .escape()
+      .customSanitizer((value) => (Array.isArray(value) ? value : [value]))
       .custom(async (value, { req }) => {
         const effect = await Effect.findById(value);
         if (!effect) {
