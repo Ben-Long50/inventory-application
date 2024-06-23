@@ -37,3 +37,7 @@
   display: flex;
   gap: 1rem;
 }
+
+.lore {
+  line-height: 2rem;
+}

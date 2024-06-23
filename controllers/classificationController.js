@@ -107,12 +107,12 @@ const classificationController = {
       // Extract the validation errors from a request.
       const errors = validationResult(req);
 
-      // Create a Book object with escaped and trimmed data.
-      const classification = new Classification({
+      const classificationData = {
+        _id: req.params.id,
         title: req.body.title,
         multiplier: req.body.multiplier,
         subMultiplier: req.body.subMultiplier,
-      });
+      };
 
       if (!errors.isEmpty()) {
         // There are errors. Render form again with sanitized values/error messages.
@@ -125,8 +125,13 @@ const classificationController = {
           errors: errors.array(),
         });
       } else {
-        // Data from form is valid. Save book.
-        await classification.save();
+        await Classification.findByIdAndUpdate(
+          req.params.id,
+          classificationData,
+          {
+            new: true,
+          },
+        );
         res.redirect('/catalog/classifications');
       }
     }),

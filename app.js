@@ -17,7 +17,9 @@ const __dirname = import.meta.dirname;
 const app = express();
 mongoose.set('strictQuery', false);
 
-const mongoDB = process.env.DATABASE_URL;
+const mongoDB =
+  process.env.DATABASE_URL ||
+  'mongodb+srv://Ben_Long:7skFOfMMxEQz6mwz@cluster0.xp4dg26.mongodb.net/apothecary?retryWrites=true&w=majority&appName=Cluster0';
 
 main().catch((err) => console.log(err));
 

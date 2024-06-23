@@ -95,11 +95,12 @@ const effectController = {
     asyncHandler(async (req, res, next) => {
       const errors = validationResult(req);
 
-      const effect = new Effect({
+      const effectData = {
+        _id: req.params.id,
         title: req.body.title,
         statBonus: req.body.statBonus,
         duration: req.body.duration,
-      });
+      };
 
       if (!errors.isEmpty()) {
         res.render('effectForm', {
@@ -108,7 +109,9 @@ const effectController = {
           errors: errors.array(),
         });
       } else {
-        await effect.save();
+        await Effect.findByIdAndUpdate(req.params.id, effectData, {
+          new: true,
+        });
         res.redirect('/catalog/effects');
       }
     }),
