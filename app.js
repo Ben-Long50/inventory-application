@@ -17,9 +17,7 @@ const __dirname = import.meta.dirname;
 const app = express();
 mongoose.set('strictQuery', false);
 
-const mongoDB =
-  process.env.DATABASE_URL ||
-  'mongodb+srv://Ben_Long:7skFOfMMxEQz6mwz@cluster0.xp4dg26.mongodb.net/apothecary?retryWrites=true&w=majority&appName=Cluster0';
+const mongoDB = process.env.DATABASE_URL;
 
 main().catch((err) => console.log(err));
 
@@ -47,7 +45,7 @@ app.set('view engine', 'ejs');
 app.use(limiter);
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));

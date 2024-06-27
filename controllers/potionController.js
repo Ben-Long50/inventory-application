@@ -69,7 +69,6 @@ const potionController = {
     body('classification', 'Classification must not be empty.')
       .trim()
       .isLength({ min: 1 })
-      .escape()
       .custom(async (value, { req }) => {
         const classification = await Classification.findById(value);
         if (!classification) {
@@ -80,7 +79,6 @@ const potionController = {
     body('effect', 'Primary Effect must not be empty.')
       .trim()
       .isLength({ min: 1 })
-      .escape()
       .custom(async (value, { req }) => {
         const effect = await Effect.findById(value);
         if (!effect) {
@@ -90,7 +88,6 @@ const potionController = {
       }),
     body('subEffect')
       .optional()
-      .escape()
       .customSanitizer((value) => (Array.isArray(value) ? value : [value]))
       .custom(async (value, { req }) => {
         req.subEffects = [];
@@ -102,12 +99,11 @@ const potionController = {
           req.subEffects.push(effect);
         }
       }),
-    body('price', 'Price must not be empty').trim().isInt({ min: 0 }).escape(),
+    body('price', 'Price must not be empty').trim().isInt({ min: 0 }),
     body('quantityInStock', 'In Stock must not be empty')
       .trim()
-      .isInt({ min: 0 })
-      .escape(),
-    body('lore').optional().trim().escape(),
+      .isInt({ min: 0 }),
+    body('lore').optional().trim(),
 
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
@@ -246,7 +242,6 @@ const potionController = {
     body('classification', 'Classification must not be empty.')
       .trim()
       .isLength({ min: 1 })
-      .escape()
       .custom(async (value, { req }) => {
         const classification = await Classification.findById(value);
         if (!classification) {
@@ -257,7 +252,6 @@ const potionController = {
     body('effect', 'Primary Effect must not be empty.')
       .trim()
       .isLength({ min: 1 })
-      .escape()
       .custom(async (value, { req }) => {
         const effect = await Effect.findById(value);
         if (!effect) {
@@ -267,7 +261,6 @@ const potionController = {
       }),
     body('subEffect')
       .optional()
-      .escape()
       .customSanitizer((value) => (Array.isArray(value) ? value : [value]))
       .custom(async (value, { req }) => {
         req.subEffects = [];
@@ -281,13 +274,11 @@ const potionController = {
       }),
     body('price', 'Price must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
-      .escape(),
+      .isInt({ min: 0 }),
     body('quantityInStock', 'In Stock must be a non-negative number')
       .trim()
-      .isInt({ min: 0 })
-      .escape(),
-    body('lore').optional().trim().escape(),
+      .isInt({ min: 0 }),
+    body('lore').optional().trim(),
 
     asyncHandler(async (req, res, next) => {
       const errors = validationResult(req);

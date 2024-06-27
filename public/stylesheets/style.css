@@ -57,6 +57,10 @@ hr {
   height: 100%;
 }
 
+.navlist-container {
+  display: none;
+}
+
 .navbar {
   height: 100%;
   font-size: 1.5rem;

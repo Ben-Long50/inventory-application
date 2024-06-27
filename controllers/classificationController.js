@@ -29,20 +29,15 @@ const classificationController = {
   }),
 
   classificationCreatePost: [
-    body('title', 'Title must not be empty.')
-      .trim()
-      .isLength({ min: 1 })
-      .escape(),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }),
 
     body('multiplier', 'Primary multiplier must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     body('subMultiplier', 'Secondary multiplier must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     // Process request after validation and sanitization.
 
@@ -86,20 +81,15 @@ const classificationController = {
   }),
 
   classificationUpdatePost: [
-    body('title', 'Title must not be empty.')
-      .trim()
-      .isLength({ min: 1 })
-      .escape(),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }),
 
     body('multiplier', 'Primary multiplier must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     body('subMultiplier', 'Secondary multiplier must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     // Process request after validation and sanitization.
 

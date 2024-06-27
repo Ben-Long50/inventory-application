@@ -29,20 +29,15 @@ const effectController = {
   }),
 
   effectCreatePost: [
-    body('title', 'Title must not be empty.')
-      .trim()
-      .isLength({ min: 1 })
-      .escape(),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }),
 
     body('statBonus', 'Stat Bonus must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     body('duration', 'Duration must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     asyncHandler(async (req, res, next) => {
       const errors = validationResult(req);
@@ -77,20 +72,15 @@ const effectController = {
   }),
 
   effectUpdatePost: [
-    body('title', 'Title must not be empty.')
-      .trim()
-      .isLength({ min: 1 })
-      .escape(),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }),
 
     body('statBonus', 'Stat Bonus must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     body('duration', 'Duration must be a non-negative number')
       .trim()
-      .isFloat({ min: 0 })
-      .escape(),
+      .isFloat({ min: 0 }),
 
     asyncHandler(async (req, res, next) => {
       const errors = validationResult(req);
